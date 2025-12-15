@@ -1,0 +1,28 @@
+.window {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  gap: 20px;
+  border-radius: 8px;
+  max-height: 400px;
+  max-width: 100%;
+  overflow-y: auto;
+  border: 2px solid rgb(57, 117, 143);
+  height: 400px;
+  width: 400px;
+  flex-wrap: wrap;
+}
+.myproduct {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  margin: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  height: fit-content;
+}
