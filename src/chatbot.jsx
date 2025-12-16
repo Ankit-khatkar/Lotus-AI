@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import "./chatbot.css";
 import { CiUser } from "react-icons/ci";
 import { FaBraille } from "react-icons/fa";
-const chatMessages = [
-  { message: "Hii, Lotus AI", sender: "user", className: "chatUiUser" },
-  {
-    message: "Hello Ankit, How can i help you ?",
-    sender: "robot",
-    className: "chatUiRobot",
-  },
-];
+import { getResponse } from "./responseLibrary.js";
+
 function ChatMsg(props) {
   const { message, sender, className, id } = props;
   if (sender === "user") {
@@ -18,7 +12,6 @@ function ChatMsg(props) {
         <div className={className}>
           <p>{message}</p>
           <CiUser />
-          {console.log(id)}
         </div>
       </>
     );
@@ -28,28 +21,45 @@ function ChatMsg(props) {
         <div className={className}>
           <FaBraille />
           <p>{message}</p>
-          {console.log(id)}
         </div>
       </>
     );
   }
 }
-function Mymsg() {
-  const [chatmsg, setchatmsg] = React.useState("");
-}
-function SendMsg(setchatmsg) {
-  setchatmsg([...chatmsg]);
-}
 
-function Chatbot(chatMessage) {
-  const chatcomponents = chatMessages.map((chatmessage) => {
+function Chatbot() {
+  const [currentMsg, setCurrentMsg] = useState([]);
+  const [inputText, setinputText] = useState("");
+  const InputMsg = (e) => {
+    setinputText(e.target.value);
+  };
+  const SendMsg = () => {
+    if (inputText.trim()) {
+      const userMsg = {
+        message: inputText,
+        sender: "user",
+        className: "chatUiUser",
+        id: crypto.randomUUID(),
+      };
+      const robotMsg = {
+        message: getResponse(inputText),
+        sender: "robot",
+        className: "chatUiRobot",
+        id: crypto.randomUUID(),
+      };
+      setCurrentMsg((currentMsg) => [...currentMsg, userMsg, robotMsg]);
+      setinputText("");
+    }
+  };
+
+  const chatcomponents = currentMsg.map((chatmessage) => {
     return (
       <>
         <ChatMsg
           message={chatmessage.message}
           sender={chatmessage.sender}
           className={chatmessage.className}
-          id={crypto.randomUUID()}
+          id={chatmessage.id}
         />
       </>
     );
@@ -62,9 +72,10 @@ function Chatbot(chatMessage) {
             type="text"
             placeholder="Ask anything to Lotus AI"
             className="searchBox"
-            onChange={Mymsg}
+            onChange={InputMsg}
+            value={inputText}
           />
-          <button onClick={Mymsg} className="btn">
+          <button onClick={SendMsg} className="btn">
             Send
           </button>
         </div>
