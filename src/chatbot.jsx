@@ -33,7 +33,8 @@ function Chatbot() {
   const InputMsg = (e) => {
     setinputText(e.target.value);
   };
-  const SendMsg = () => {
+
+  const SendMsg = (e) => {
     if (inputText.trim()) {
       const userMsg = {
         message: inputText,
@@ -51,7 +52,14 @@ function Chatbot() {
       setinputText("");
     }
   };
-
+  const Keyhandle = (e) => {
+    if (e.key === "Enter") {
+      SendMsg();
+    }
+    if (e.key === "Escape") {
+      setinputText("");
+    }
+  };
   const chatcomponents = currentMsg.map((chatmessage) => {
     return (
       <>
@@ -74,6 +82,7 @@ function Chatbot() {
             className="searchBox"
             onChange={InputMsg}
             value={inputText}
+            onKeyDown={Keyhandle}
           />
           <button onClick={SendMsg} className="btn">
             Send
