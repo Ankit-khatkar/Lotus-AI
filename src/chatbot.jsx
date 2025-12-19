@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./chatbot.css";
 import { CiUser } from "react-icons/ci";
-import { FaBraille } from "react-icons/fa";
+import { FaRobot } from "react-icons/fa6";
 import { getResponse } from "./responseLibrary.js";
 
 function ChatMsg(props) {
@@ -10,8 +10,9 @@ function ChatMsg(props) {
     return (
       <>
         <div className={className}>
-          <p>{message}</p>
-          <CiUser />
+          <p className="chatText">{message}</p>
+          <CiUser className="profile" />
+          {/* <img src="src\imgs\User.svg" alt="" className="profile" /> */}
         </div>
       </>
     );
@@ -19,8 +20,8 @@ function ChatMsg(props) {
     return (
       <>
         <div className={className}>
-          <FaBraille />
-          <p>{message}</p>
+          <FaRobot className="profile" />
+          <p className="chatText">{message}</p>
         </div>
       </>
     );
@@ -30,6 +31,26 @@ function ChatMsg(props) {
 function Chatbot() {
   const [currentMsg, setCurrentMsg] = useState([]);
   const [inputText, setinputText] = useState("");
+  const chatContainerRef = React.useRef(null);
+  const chatcomponents = currentMsg.map((chatmessage) => {
+    return (
+      <>
+        <ChatMsg
+          message={chatmessage.message}
+          sender={chatmessage.sender}
+          className={chatmessage.className}
+          id={chatmessage.id}
+        />
+      </>
+    );
+  });
+
+  React.useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [currentMsg]);
   const InputMsg = (e) => {
     setinputText(e.target.value);
   };
@@ -60,22 +81,11 @@ function Chatbot() {
       setinputText("");
     }
   };
-  const chatcomponents = currentMsg.map((chatmessage) => {
-    return (
-      <>
-        <ChatMsg
-          message={chatmessage.message}
-          sender={chatmessage.sender}
-          className={chatmessage.className}
-          id={chatmessage.id}
-        />
-      </>
-    );
-  });
+
   return (
     <>
-      <div className="chatContainor">
-        <div>
+      <div className="chatContainor" ref={chatContainerRef}>
+        <div className="chatHeader">
           <input
             type="text"
             placeholder="Ask anything to Lotus AI"
